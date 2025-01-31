@@ -6,6 +6,7 @@ interface WaitlistCardProps {
     lastName: string;
     phone: string;
     dateAdded: Date;
+    partySize: number;
 }
 
 const WaitlistCard: React.FC<WaitlistCardProps> = ({
@@ -13,7 +14,8 @@ const WaitlistCard: React.FC<WaitlistCardProps> = ({
     firstName,
     lastName,
     phone,
-    dateAdded
+    dateAdded,
+    partySize
 }) => {
     return (
         <div className="bg-slate-500">
@@ -21,6 +23,7 @@ const WaitlistCard: React.FC<WaitlistCardProps> = ({
                 <p>Position: {position}</p>
             }
             <p>Name: {firstName} {lastName}</p>
+            <p>Party Size: {partySize}</p>
             <p>Phone: {phone}</p>
             <p>Added: {dateAdded.toLocaleString()}</p>
         </div>

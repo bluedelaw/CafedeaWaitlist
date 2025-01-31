@@ -49,6 +49,7 @@ export default function page() {
                   lastName={entry.lastName}
                   phone={entry.phone}
                   dateAdded={entry.dateAdded}
+                  partySize={entry.partySize}
                 />
               ))
           ) : (
