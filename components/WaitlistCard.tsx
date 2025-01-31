@@ -15,7 +15,7 @@ const WaitlistCard: React.FC<WaitlistCardProps> = ({
     lastName,
     phone,
     dateAdded,
-    partySize
+    partySize,
 }) => {
     return (
         <div className="bg-blue-700">
