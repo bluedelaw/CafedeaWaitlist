@@ -60,7 +60,7 @@ export default function Page() {
   return (
     <>
       <div className="bg-red-800">
-        <h1>Dashboard</h1>
+        <h1>Title</h1>
       </div>
 
       <div className="bg-green-800">
