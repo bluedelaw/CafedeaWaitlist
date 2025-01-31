@@ -1,12 +1,11 @@
 "use client"
 
 import WaitlistCard from "@/components/WaitlistCard";
-import { db, collection, getDocs, doc, updateDoc } from "@/firebaseConfig";
+import { db, collection, getDocs } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [waitlist, setWaitlist] = useState<any[]>([]);
-  const [waitEstimates, setWaitEstimates] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchWaitlistData = async () => {
@@ -29,11 +28,15 @@ export default function Page() {
   return (
     <>
       <div className="bg-red-800">
-        <h1>Title</h1>
+        <h1>
+          Title
+        </h1>
       </div>
 
       <div className="bg-blue-800">
-        <h2>Waitlist:</h2>
+        <h2>
+          Waitlist:
+        </h2>
         <div className="space-y-4">
           {waitlist.length > 0 ? (
             waitlist

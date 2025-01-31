@@ -10,6 +10,11 @@ const MyNavbar = () => {
                         Home
                     </a>
                 </li>
+                <li>
+                    <a href='/add'>
+                        Add
+                    </a>
+                </li>
             </ul>
         </nav>
     </>
