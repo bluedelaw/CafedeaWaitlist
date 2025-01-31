@@ -15,6 +15,7 @@ export default function page() {
         const data = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
+          dateAdded: doc.data().dateAdded.toDate(),
         }));
         setWaitlist(data);
       } catch (error) {
