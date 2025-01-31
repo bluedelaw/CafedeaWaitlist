@@ -29,7 +29,7 @@ const WaitEstimatesAdjuster: React.FC<WaitEstimatesAdjusterProps> = ({
                     id="waitFor2"
                     value={newWaitFor2}
                     onChange={(e) => setNewWaitFor2(Number(e.target.value))}
-                    className=""
+                    className="text-black"
                 />
             </div>
             <div>
@@ -39,7 +39,7 @@ const WaitEstimatesAdjuster: React.FC<WaitEstimatesAdjusterProps> = ({
                     id="waitFor4"
                     value={newWaitFor4}
                     onChange={(e) => setNewWaitFor4(Number(e.target.value))}
-                    className=""
+                    className="text-black"
                 />
             </div>
             <button onClick={handleSave} className="bg-green-600">
