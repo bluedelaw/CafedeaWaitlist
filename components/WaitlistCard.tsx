@@ -1,7 +1,14 @@
 import React from "react";
-import { WaitlistEntry } from "@/data";
 
-const WaitlistCard: React.FC<WaitlistEntry> = ({
+interface WaitlistCardProps {
+    position?: number;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    dateAdded: Date;
+}
+
+const WaitlistCard: React.FC<WaitlistCardProps> = ({
     position,
     firstName,
     lastName,
