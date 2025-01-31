@@ -1,15 +1,16 @@
 "use client";
 
+import WaitEstimatesAdjuster from "@/components/WaitEstimatesAdjuster";
 import WaitlistCard from "@/components/WaitlistCard";
 import { db, collection, getDocs } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 
 export default function page() {
-  const [waitlist, setWaitlist] = useState<any[]>([]); // Store data from Firestore
+  const [waitlist, setWaitlist] = useState<any[]>([]);
+  const [waitEstimates, setWaitEstimates] = useState<any | null>(null);
 
   useEffect(() => {
-    // Fetch data from Firestore on component mount
-    const fetchData = async () => {
+    const fetchWaitlistData = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "waitlist"));
         const data = querySnapshot.docs.map((doc) => ({
@@ -23,17 +24,51 @@ export default function page() {
       }
     };
 
-    fetchData();
-  }, []); // Empty dependency array ensures it runs only once
+    const fetchSettingsData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "settings"));
+        const data = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setWaitEstimates(data.find(s => s.id === "waitEstimates"));
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchSettingsData();
+    fetchWaitlistData();
+  }, []);
 
   return (
     <>
-      <div>
+      {/* Title */}
+      <div className="bg-red-800">
         <h1>
           Dashboard
         </h1>
       </div>
-      <div>
+
+      {/* Settings */}
+      <div className="bg-green-800">
+        <h2>
+          Settings
+        </h2>
+        <div className="space-y-4">
+        {waitEstimates ? (
+            <WaitEstimatesAdjuster
+              waitFor2={waitEstimates.waitFor2}
+              waitFor4={waitEstimates.waitFor4}
+            />
+          ) : (
+            <p>Loading settings...</p>
+          )}
+        </div>
+      </div>
+
+      {/* Waitlist */}
+      <div className="bg-blue-800">
         <h2>
           Waitlist:
         </h2>

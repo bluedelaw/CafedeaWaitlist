@@ -3,7 +3,7 @@ import React from 'react'
 const MyFooter = () => {
   return (
     <>
-        <footer className='w-full bg-amber-600'>
+        <footer className='w-full bg-yellow-800'>
             Footer
         </footer>
     </>

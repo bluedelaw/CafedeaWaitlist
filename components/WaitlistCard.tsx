@@ -18,7 +18,7 @@ const WaitlistCard: React.FC<WaitlistCardProps> = ({
     partySize
 }) => {
     return (
-        <div className="bg-slate-500">
+        <div className="bg-blue-700">
             {position &&
                 <p>Position: {position}</p>
             }
