@@ -1,6 +1,6 @@
 "use client";
 
-import {WaitlistCard} from "@/components/WaitlistCard";
+import { WaitlistCard } from "@/components/WaitlistCard";
 import { db, collection, getDocs, doc, updateDoc, deleteDoc } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 

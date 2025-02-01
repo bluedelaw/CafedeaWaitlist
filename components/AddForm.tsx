@@ -61,7 +61,12 @@ const AddForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (Object.values(formInputs.errors).some(error => error) || !formInputs.firstName || !formInputs.lastName || !formInputs.phone || formInputs.partySize < 1) {
+        if (Object.values(formInputs.errors).some(error => error) ||
+            !formInputs.firstName ||
+            !formInputs.lastName ||
+            !formInputs.phone ||
+            formInputs.partySize < 1
+        ) {
             alert('Please fix errors before submitting.');
             return;
         }
@@ -76,7 +81,18 @@ const AddForm: React.FC = () => {
             });
 
             alert('Waitlist entry added successfully!');
-            setFormInputs({ firstName: '', lastName: '', phone: '', partySize: 1, errors: { firstName: '', lastName: '', phone: '', partySize: '' } });
+            setFormInputs({
+                firstName: '',
+                lastName: '',
+                phone: '',
+                partySize: 1
+                , errors: {
+                    firstName: '',
+                    lastName: '',
+                    phone: '',
+                    partySize: ''
+                }
+            });
         } catch (error) {
             console.error("Error adding document: ", error);
             alert('Error adding entry. Please try again.');
@@ -107,7 +123,10 @@ const AddForm: React.FC = () => {
                         min={field === "partySize" ? 1 : undefined}
                         required
                     />
-                    {formInputs.errors[field as keyof FormInputs["errors"]] && <p className="text-red-500">{formInputs.errors[field as keyof FormInputs["errors"]]}</p>}
+                    {formInputs.errors[field as keyof FormInputs["errors"]] &&
+                        <p className="text-red-500">
+                            {formInputs.errors[field as keyof FormInputs["errors"]]}
+                        </p>}
                 </div>
             ))}
             <button type="submit" className="bg-green-500">
