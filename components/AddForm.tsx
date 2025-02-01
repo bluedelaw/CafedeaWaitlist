@@ -100,10 +100,10 @@ const AddForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-slate-800">
+        <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-100 p-6 rounded-lg shadow-lg">
             {['firstName', 'lastName', 'phone', 'partySize'].map((field) => (
-                <div key={field}>
-                    <label htmlFor={field} className="block">
+                <div key={field} className="mb-4">
+                    <label htmlFor={field} className="block text-lg font-medium text-gray-700 mb-2">
                         {
                             field === "partySize" ? "Party Size" :
                                 field === "phone" ? "Phone Number" :
@@ -119,17 +119,17 @@ const AddForm: React.FC = () => {
                         }
                         value={formInputs[field as keyof FormInputs] as string}
                         onChange={handleChange}
-                        className="text-black"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                         min={field === "partySize" ? 1 : undefined}
                         required
                     />
                     {formInputs.errors[field as keyof FormInputs["errors"]] &&
-                        <p className="text-red-500">
+                        <p className="text-red-500 text-sm mt-1">
                             {formInputs.errors[field as keyof FormInputs["errors"]]}
                         </p>}
                 </div>
             ))}
-            <button type="submit" className="bg-green-500">
+            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Add to Waitlist
             </button>
         </form>
