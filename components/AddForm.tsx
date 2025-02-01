@@ -100,7 +100,7 @@ const AddForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-100 p-6 rounded-lg shadow-lg">
+        <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-300 p-6 rounded-lg shadow-lg">
             {['firstName', 'lastName', 'phone', 'partySize'].map((field) => (
                 <div key={field} className="mb-4">
                     <label htmlFor={field} className="block text-lg font-medium text-gray-700 mb-2">

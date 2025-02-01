@@ -3,7 +3,7 @@ import React from 'react'
 const MyNavbar = () => {
   return (
     <>
-        <nav className="bg-blue-800 p-4">
+        <nav className="bg-gray-800 p-4">
             <ul className="flex space-x-4">
                 <li>
                     <a href="/" className="text-white hover:text-yellow-300">
