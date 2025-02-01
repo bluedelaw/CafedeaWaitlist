@@ -44,8 +44,8 @@ export default function Page() {
   const handleDelete = async (id: string) => {
     try {
       const waitlistRef = doc(db, "waitlist", id);
-      await deleteDoc(waitlistRef); // Delete the document from Firestore
-      setWaitlist((prev) => prev.filter((entry) => entry.id !== id)); // Remove from local state
+      await deleteDoc(waitlistRef);
+      setWaitlist((prev) => prev.filter((entry) => entry.id !== id));
     } catch (error) {
       console.error("Error deleting entry: ", error);
     }

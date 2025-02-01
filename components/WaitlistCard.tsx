@@ -10,7 +10,7 @@ interface WaitlistCardProps {
     id: string;
     onSave: (id: string, updatedFields: any) => void;
     onCancel: () => void;
-    onDelete: (id: string) => void; // New prop for delete functionality
+    onDelete: (id: string) => void;
 }
 
 export const WaitlistCard: React.FC<WaitlistCardProps> = ({
@@ -23,7 +23,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
     id,
     onSave,
     onCancel,
-    onDelete, // Use the new prop
+    onDelete,
 }) => {
     const [editMode, setEditMode] = useState(false);
     const [editFields, setEditFields] = useState({
@@ -45,7 +45,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
     };
 
     const handleDelete = () => {
-        onDelete(id); // Call the delete function when delete button is clicked
+        onDelete(id);
     };
 
     return (
@@ -114,7 +114,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
                     </button>
                     <button className="bg-red-700" onClick={handleDelete}>
                         Delete
-                    </button> {/* Delete button */}
+                    </button>
                 </div>
             )}
         </div>
