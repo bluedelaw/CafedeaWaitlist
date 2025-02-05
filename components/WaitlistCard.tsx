@@ -36,9 +36,9 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
     phone,
     partySize,
     date: new Date(dateAdded.getTime() - dateAdded.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 10),
-      time: dateAdded.toTimeString().slice(0, 5), // HH:mm
+      .toISOString()
+      .slice(0, 10),
+    time: dateAdded.toTimeString().slice(0, 5), // HH:mm
   })
 
   const sendSMS = async (phoneNumber: string, message: string) => {
@@ -62,7 +62,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
   }
 
   const handleSendSMS = () => {
-    const message = "Your table is ready! Please head to the restaurant to be seated. 你的坐位已經安排，請你在5分鐘內回到餐廳。#{}"
+    const message = "Your table is ready! Please head to the restaurant to be seated. 你的坐位已經安排，請你在5分鐘內回到餐廳。"
     sendSMS(phone, message)
   }
 
@@ -137,6 +137,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
                 type="date"
                 value={editFields.date}
                 onChange={(e) => setEditFields({ ...editFields, date: e.target.value })}
+                disabled={type === "waitlist"}
               />
             </div>
             <div>
@@ -146,6 +147,7 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
                 type="time"
                 value={editFields.time}
                 onChange={(e) => setEditFields({ ...editFields, time: e.target.value })}
+                disabled={type === "waitlist"}
               />
             </div>
           </div>
@@ -197,4 +199,3 @@ export const WaitlistCard: React.FC<WaitlistCardProps> = ({
     </Card>
   )
 }
-
