@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "export": "next export",
     "build": "next build",
+    "deploy": "gh-pages -d out",
     "start": "next start",
     "lint": "next lint"
   },
@@ -46,6 +47,7 @@
     "dotenv": "^16.4.7",
     "embla-carousel-react": "^8.5.2",
     "firebase": "^11.2.0",
+    "gh-pages": "^6.3.0",
     "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",
     "libphonenumber-js": "^1.11.19",

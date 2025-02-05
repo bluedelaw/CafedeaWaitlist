@@ -1,8 +1,13 @@
-import type { NextConfig } from 'next'
+// next.config.js
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',  // Enable static export
-  // other configurations can go here
-}
+  // Enable static export
+  output: "export",
+  // Prefix for the subdirectory (replace with the name of your repo or folder)
+  basePath: "/CafedeaWaitlist",
+  assetPrefix: "/CafedeaWaitlist/",
+  trailingSlash: true, // Ensures paths have trailing slashes (GitHub Pages needs this)
+};
 
 export default nextConfig;
