@@ -1,139 +1,201 @@
-'use client'
+"use client"
 
-import React, { useState } from 'react';
-import { db, collection, addDoc } from "@/firebaseConfig";
+import type React from "react"
+import { useState } from "react"
+import { db, collection, addDoc } from "@/firebaseConfig"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 interface FormInputs {
-    firstName: string;
-    lastName: string;
-    phone: string;
-    partySize: number;
-    errors: {
-        firstName: string;
-        lastName: string;
-        phone: string;
-        partySize: string;
-    };
+  name: string
+  phone: string
+  partySize: number
+  reservationTime?: string
+  errors: {
+    name: string
+    phone: string
+    partySize: string
+    reservationTime?: string
+  }
 }
 
-const AddForm: React.FC = () => {
-    const [formInputs, setFormInputs] = useState<FormInputs>({
-        firstName: '',
-        lastName: '',
-        phone: '',
+interface AddFormProps {
+  type?: "waitlist" | "reservation"
+  title?: string
+}
+
+const AddForm: React.FC<AddFormProps> = ({ type = "waitlist", title }) => {
+  const [formInputs, setFormInputs] = useState<FormInputs>({
+    name: "",
+    phone: "",
+    partySize: 1,
+    reservationTime: "",
+    errors: { name: "", phone: "", partySize: "", reservationTime: "" },
+  })
+
+  const isValidPhoneNumber = (phone: string): boolean => {
+    const phoneRegex = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+    return phoneRegex.test(phone)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target
+
+    setFormInputs((prev) => {
+      const newErrors = { ...prev.errors }
+
+      switch (id) {
+        case "name":
+          newErrors.name = value ? "" : "Name is required."
+          break
+        case "phone":
+          newErrors.phone = value
+            ? isValidPhoneNumber(value)
+              ? ""
+              : "Invalid Phone Number."
+            : "Phone Number is required."
+          break
+        case "partySize":
+          newErrors.partySize = Number(value) >= 1 ? "" : "Party Size must be at least 1."
+          break
+        case "reservationTime":
+          if (type === "reservation") {
+            newErrors.reservationTime = value ? "" : "Reservation time is required."
+          }
+          break
+      }
+
+      return {
+        ...prev,
+        [id]: id === "partySize" ? Number(value) : value,
+        errors: newErrors,
+      }
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const hasErrors = Object.values(formInputs.errors).some((error) => error)
+    const missingFields = !formInputs.name || !formInputs.phone || formInputs.partySize < 1
+    const missingReservationTime = type === "reservation" && !formInputs.reservationTime
+
+    if (hasErrors || missingFields || missingReservationTime) {
+      alert("Please fix errors before submitting.")
+      return
+    }
+
+    try {
+      await addDoc(collection(db, "waitlist"), {
+        name: formInputs.name,
+        phone: formInputs.phone,
+        partySize: formInputs.partySize,
+        dateAdded: new Date(),
+        type,
+        ...(type === "reservation" && { reservationTime: formInputs.reservationTime }),
+      })
+
+      alert(`${type === "reservation" ? "Reservation" : "Waitlist"} entry added successfully!`)
+      setFormInputs({
+        name: "",
+        phone: "",
         partySize: 1,
-        errors: { firstName: '', lastName: '', phone: '', partySize: '' }
-    });
+        reservationTime: "",
+        errors: { name: "", phone: "", partySize: "", reservationTime: "" },
+      })
+    } catch (error) {
+      console.error("Error adding document: ", error)
+      alert("Error adding entry. Please try again.")
+    }
+  }
 
-    const isValidPhoneNumber = (phone: string): boolean => {
-        const phoneRegex = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
-        return phoneRegex.test(phone);
-    };
+  return (
+    <Card className="w-full max-w-md mx-auto bg-gray-700 text-white shadow-lg">
+      <CardHeader className="p-4 sm:p-6">
+        <CardTitle className="text-xl sm:text-2xl font-semibold text-center">
+          {title || (type === "reservation" ? "Make a Reservation" : "Join Waitlist")}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 sm:p-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-white text-sm sm:text-base">
+              Name
+            </Label>
+            <Input
+              id="name"
+              value={formInputs.name}
+              onChange={handleChange}
+              required
+              className="bg-gray-600 text-white border-gray-500 text-sm sm:text-base p-2 sm:p-3"
+            />
+            {formInputs.errors.name && <p className="text-red-400 text-xs sm:text-sm">{formInputs.errors.name}</p>}
+          </div>
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-        let newValue: string | number = value;
-        if (id === "partySize") newValue = Number(value);
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="text-white text-sm sm:text-base">
+              Phone Number
+            </Label>
+            <Input
+              id="phone"
+              value={formInputs.phone}
+              onChange={handleChange}
+              required
+              className="bg-gray-600 text-white border-gray-500 text-sm sm:text-base p-2 sm:p-3"
+            />
+            {formInputs.errors.phone && <p className="text-red-400 text-xs sm:text-sm">{formInputs.errors.phone}</p>}
+          </div>
 
-        setFormInputs((prev) => {
-            const newErrors = { ...prev.errors };
+          <div className="space-y-2">
+            <Label htmlFor="partySize" className="text-white text-sm sm:text-base">
+              Party Size
+            </Label>
+            <Input
+              id="partySize"
+              type="number"
+              value={formInputs.partySize}
+              onChange={handleChange}
+              min={1}
+              required
+              className="bg-gray-600 text-white border-gray-500 text-sm sm:text-base p-2 sm:p-3"
+            />
+            {formInputs.errors.partySize && (
+              <p className="text-red-400 text-xs sm:text-sm">{formInputs.errors.partySize}</p>
+            )}
+          </div>
 
-            switch (id) {
-                case "firstName":
-                    newErrors.firstName = value ? "" : "First Name is required";
-                    break;
-                case "lastName":
-                    newErrors.lastName = value ? "" : "Last Name is required";
-                    break;
-                case "phone":
-                    newErrors.phone = value ? (isValidPhoneNumber(value) ? "" : "Invalid Phone Number") : "Phone Number is required";
-                    break;
-                case "partySize":
-                    newErrors.partySize = Number(value) >= 1 ? "" : "Party Size must be at least 1";
-                    break;
-                default:
-                    break;
-            }
+          {type === "reservation" && (
+            <div className="space-y-2">
+              <Label htmlFor="reservationTime" className="text-white text-sm sm:text-base">
+                Reservation Time
+              </Label>
+              <Input
+                id="reservationTime"
+                type="time"
+                value={formInputs.reservationTime}
+                onChange={handleChange}
+                required
+                className="bg-gray-600 text-white border-gray-500 text-sm sm:text-base p-2 sm:p-3"
+              />
+              {formInputs.errors.reservationTime && (
+                <p className="text-red-400 text-xs sm:text-sm">{formInputs.errors.reservationTime}</p>
+              )}
+            </div>
+          )}
 
-            return { ...prev, [id]: newValue, errors: newErrors };
-        });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (Object.values(formInputs.errors).some(error => error) ||
-            !formInputs.firstName ||
-            !formInputs.lastName ||
-            !formInputs.phone ||
-            formInputs.partySize < 1
-        ) {
-            alert('Please fix errors before submitting.');
-            return;
-        }
-
-        try {
-            await addDoc(collection(db, "waitlist"), {
-                firstName: formInputs.firstName,
-                lastName: formInputs.lastName,
-                phone: formInputs.phone,
-                partySize: formInputs.partySize,
-                dateAdded: new Date(),
-            });
-
-            alert('Waitlist entry added successfully!');
-            setFormInputs({
-                firstName: '',
-                lastName: '',
-                phone: '',
-                partySize: 1
-                , errors: {
-                    firstName: '',
-                    lastName: '',
-                    phone: '',
-                    partySize: ''
-                }
-            });
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            alert('Error adding entry. Please try again.');
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-gray-300 p-6 rounded-lg shadow-lg">
-            {['firstName', 'lastName', 'phone', 'partySize'].map((field) => (
-                <div key={field} className="mb-4">
-                    <label htmlFor={field} className="block text-lg font-medium text-gray-700 mb-2">
-                        {
-                            field === "partySize" ? "Party Size" :
-                                field === "phone" ? "Phone Number" :
-                                    field === "firstName" ? "First Name" :
-                                        field === "lastName" ? "Last Name" : "Unknown"
-                        }
-                    </label>
-                    <input
-                        id={field}
-                        type={
-                            field === "partySize" ? "number" :
-                                field === "phone" ? "tel" : "text"
-                        }
-                        value={formInputs[field as keyof FormInputs] as string}
-                        onChange={handleChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-                        min={field === "partySize" ? 1 : undefined}
-                        required
-                    />
-                    {formInputs.errors[field as keyof FormInputs["errors"]] &&
-                        <p className="text-red-500 text-sm mt-1">
-                            {formInputs.errors[field as keyof FormInputs["errors"]]}
-                        </p>}
-                </div>
-            ))}
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Add to Waitlist
-            </button>
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base py-2 sm:py-3"
+          >
+            Add {type === "reservation" ? "Reservation" : "Waitlist"} Entry
+          </Button>
         </form>
-    );
-};
+      </CardContent>
+    </Card>
+  )
+}
 
-export default AddForm;
+export default AddForm
+

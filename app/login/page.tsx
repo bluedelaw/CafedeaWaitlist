@@ -29,8 +29,10 @@ export default function LoginPage() {
         setError("No password found in database");
       }
     } catch (err) {
+      console.error(err);  // This logs the error to the console
       setError("Error checking password");
     }
+    
   };
 
   return (
